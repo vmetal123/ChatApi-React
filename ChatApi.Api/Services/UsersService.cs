@@ -97,7 +97,8 @@ namespace ChatApi.Api.Services
                 (
                     new Claim[]
                     {
-                        new Claim(ClaimTypes.Name, user.Email)
+                        new Claim(ClaimTypes.Name, user.Email),
+                        new Claim("Id", user.Id.ToString())
                     }
                 ),
                 Expires = DateTime.UtcNow.AddHours(12),

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ChatApi.Api.Common;
 using ChatApi.Api.Hubs;
 using ChatApi.Api.Identity;
+using ChatApi.Api.Models;
 using ChatApi.Api.Services;
 using ChatApi.Api.Services.Interfaces;
 using FluentValidation.AspNetCore;
@@ -41,6 +42,7 @@ namespace ChatApi.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ChatConnection")));
+            services.AddDbContext<ChatDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ChatConnection")));
 
             services.AddIdentity<AppUser, AppRole>()
                 .AddDefaultTokenProviders()
@@ -100,6 +102,9 @@ namespace ChatApi.Api
             services.AddSignalR();
             services.AddSingleton<IUserIdProvider, NameUserIdProvider>();
             services.AddScoped<IUsersService, UsersService>();
+            services.AddScoped<IMessagesService, MessagesService>();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
+            services.AddSingleton<ITrackingUsersService, TrackingUsersService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
