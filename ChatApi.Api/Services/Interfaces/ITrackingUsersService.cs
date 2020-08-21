@@ -1,5 +1,6 @@
 ﻿using ChatApi.Api.Models.Hub;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,9 @@ namespace ChatApi.Api.Services.Interfaces
 {
     public interface ITrackingUsersService
     {
-        List<UserConnected> UsersConnected { get; set; }
+        bool AddOrUpdate(string name, string connectionId);
+        void Remove(string name);
+        IEnumerable<UserConnected> GetAllUsersExceptThis(string name);
+        UserConnected GetUserInfo(string name);
     }
 }

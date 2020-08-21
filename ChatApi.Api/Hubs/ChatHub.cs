@@ -23,20 +23,20 @@ namespace ChatApi.Api.Hubs
 
         public override async Task OnConnectedAsync()
          {
-            _trackingUsersService.UsersConnected.Add(new UserConnected { ConnectionId = Context.ConnectionId, UserName = Context.User.Identity.Name });
-            await Clients.All.SendAsync("ConnectedUsers", _trackingUsersService.UsersConnected);
+            _trackingUsersService.AddOrUpdate(Context.User.Identity.Name, Context.ConnectionId);
+            await Clients.All.SendAsync("ConnectedUsers", _trackingUsersService.GetAllUsersExceptThis(Context.User.Identity.Name));
             await base.OnConnectedAsync();
         }
 
         public Task SendMessage(MessageInput messageInput)
         {
-            var userConnectionId = _trackingUsersService.UsersConnected.Find(x => x.UserName == messageInput.User).ConnectionId;
+            var userConnectionId = _trackingUsersService.GetUserInfo(messageInput.User).ConnectionId;
             return Clients.Client(userConnectionId).SendAsync("message", new { Message = messageInput.Message, Date = DateTime.Now, User = messageInput.User });
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            _trackingUsersService.UsersConnected.Remove( new UserConnected { ConnectionId = Context.ConnectionId, UserName = Context.User.Identity.Name });
+            _trackingUsersService.Remove(Context.User.Identity.Name);
             await base.OnDisconnectedAsync(exception);
         }
     }
