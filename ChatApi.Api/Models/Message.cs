@@ -16,7 +16,9 @@ namespace ChatApi.Api.Models
         [Column(TypeName = "nvarchar(1028)")]
         public string Text { get; set; }
         public Guid UserId { get; set; }
+        [Column(TypeName = "nvarchar(64)")]
         public string UserName { get; set; }
+        [Column(TypeName = "nvarchar(64)")]
         public string To { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime Date { get; set; }
